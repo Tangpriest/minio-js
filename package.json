@@ -1,7 +1,7 @@
 {
-  "name": "minio",
-  "version": "8.0.2",
-  "description": "S3 Compatible Cloud Storage client",
+  "name": "minio-domain",
+  "version": "8.0.3",
+  "description": "minio-domain support base on minio 8.0.3",
   "main": "./dist/main/minio.js",
   "module": "./dist/esm/minio.mjs",
   "scripts": {

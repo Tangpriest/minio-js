@@ -152,6 +152,7 @@ const requestOptionProperties = [
 
 export interface ClientOptions {
   endPoint: string
+  domain : string
   accessKey: string
   secretKey: string
   useSSL?: boolean
@@ -194,6 +195,7 @@ type Part = {
 export class TypedClient {
   protected transport: Transport
   protected host: string
+  protected domain : string
   protected port: number
   protected protocol: string
   protected accessKey: string
@@ -302,6 +304,7 @@ export class TypedClient {
     this.transport = transport
     this.transportAgent = transportAgent
     this.host = host
+    this.domain = params.domain 
     this.port = port
     this.protocol = protocol
     this.userAgent = `${libraryAgent}`
@@ -495,6 +498,10 @@ export class TypedClient {
     reqOptions.headers.host = host
     if ((reqOptions.protocol === 'http:' && port !== 80) || (reqOptions.protocol === 'https:' && port !== 443)) {
       reqOptions.headers.host = joinHostPort(host, port)
+    }
+
+    if(this.domain){
+      reqOptions.headers.host = this.domain
     }
 
     reqOptions.headers['user-agent'] = this.userAgent

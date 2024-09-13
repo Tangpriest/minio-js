@@ -17,17 +17,24 @@
 // Note: YOUR-ACCESSKEYID, YOUR-SECRETACCESSKEY, my-bucketname and my-objectname
 // are dummy values, please replace them with original values.
 
+import dotenv from 'dotenv'
 import * as Minio from 'minio'
 
+dotenv.config()
+
+const { SERVER_ENDPOINT, ACCESS_KEY, SECRET_KEY,USESSL,PORT } = process.env
+
 const s3Client = new Minio.Client({
-  endPoint: 's3.amazonaws.com',
-  accessKey: 'YOUR-ACCESSKEYID',
-  secretKey: 'YOUR-SECRETACCESSKEY',
+  endPoint: SERVER_ENDPOINT,
+  accessKey: ACCESS_KEY,
+  secretKey: SECRET_KEY,
+  useSSL: USESSL === 'true',
+  port: parseInt(PORT),
 })
 
 let size = 0
 // Get a full object.
-const dataStream1 = await s3Client.getObject('my-bucketname', 'my-objectname')
+const dataStream1 = await s3Client.getObject('sh-custom-recordings', '/Users/admin/oceans.mp4')
 
 dataStream1.on('data', function (chunk) {
   size += chunk.length
@@ -39,18 +46,18 @@ dataStream1.on('error', function (e) {
   console.log(e)
 })
 
-//Get a specific version of an object
-let versionedObjSize = 0
-const dataStream2 = await s3Client.getObject('my-versioned-bucket', 'my-versioned-object', {
-  versionId: 'my-versionId',
-})
+// //Get a specific version of an object
+// let versionedObjSize = 0
+// const dataStream2 = await s3Client.getObject('my-versioned-bucket', 'my-versioned-object', {
+//   versionId: 'my-versionId',
+// })
 
-dataStream2.on('data', function (chunk) {
-  versionedObjSize += chunk.length
-})
-dataStream2.on('end', function () {
-  console.log('End. Total size = ' + versionedObjSize)
-})
-dataStream2.on('error', function (err) {
-  console.log(err)
-})
+// dataStream2.on('data', function (chunk) {
+//   versionedObjSize += chunk.length
+// })
+// dataStream2.on('end', function () {
+//   console.log('End. Total size = ' + versionedObjSize)
+// })
+// dataStream2.on('error', function (err) {
+//   console.log(err)
+// })

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http:   //www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,15 +17,29 @@
 // Note: YOUR-ACCESSKEYID, YOUR-SECRETACCESSKEY, my-bucketname and my-objectname
 // are dummy values, please replace them with original values.
 
-import * as Minio from 'minio'
+import dotenv from 'dotenv'
+import * as Minio from '../dist/esm/minio.mjs'
+
+dotenv.config()
+
+const { 
+  SERVER_ENDPOINT, 
+  ACCESS_KEY, 
+  SECRET_KEY, 
+  USESSL, 
+  PORT 
+} = process.env
 
 const s3Client = new Minio.Client({
-  endPoint: 's3.amazonaws.com',
-  accessKey: 'YOUR-ACCESSKEYID',
-  secretKey: 'YOUR-SECRETACCESSKEY',
-  useSSL: true, // Default is true.
+  endPoint  : SERVER_ENDPOINT,
+  accessKey : ACCESS_KEY,
+  secretKey : SECRET_KEY,
+  useSSL    : USESSL === 'true',
+  port      : parseInt(PORT),
+  domain    : 'your-domain.com',
 })
 
+
 // Presigned get object URL for my-objectname at my-bucketname, it expires in 7 days by default.
-const presignedUrl = await s3Client.presignedGetObject('my-bucketname', 'my-objectname', 1000)
+const presignedUrl = await s3Client.presignedGetObject('your-bucket', 'your-object', 7 * 24 * 60 * 60)
 console.log(presignedUrl)
